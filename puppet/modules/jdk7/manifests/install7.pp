@@ -34,7 +34,7 @@ define jdk7::install7 (
   case $::kernel {
     'Linux': {
       $installVersion   = 'linux'
-      $installExtension = '.tar.gz'
+      $installExtension = '.gz'
       $path             = '/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:'
       $user             = 'root'
       $group            = 'root'
@@ -43,7 +43,7 @@ define jdk7::install7 (
       fail("Unrecognized operating system ${::kernel}, please use it on a Linux host")
     }
   }
-  
+
 
   $jdkfile = "jdk-${version}-${installVersion}-${type}${installExtension}"
 
@@ -95,7 +95,7 @@ define jdk7::install7 (
   jdk7::javaexec { "jdkexec ${title} ${version}":
     path                      => $downloadDir,
     fullVersion               => $fullVersion,
-    javaHomes                 => $javaHomes,    
+    javaHomes                 => $javaHomes,
     jdkfile                   => $jdkfile,
     cryptographyExtensionFile => $cryptographyExtensionFile,
     alternativesPriority      => $alternativesPriority,
@@ -116,12 +116,12 @@ define jdk7::install7 (
       command => "/bin/sleep 3",
       unless  => "grep 'RSA keySize < 512' ${javaHomes}/${fullVersion}/jre/lib/security/java.security",
       require => Javaexec["jdkexec ${title} ${version}"],
-    }   
+    }
     exec { "set RSA keySize ${fullVersion}":
       command     => "sed -i -e's/RSA keySize < 1024/RSA keySize < 512/g' ${javaHomes}/${fullVersion}/jre/lib/security/java.security",
       unless      => "grep 'RSA keySize < 512' ${javaHomes}/${fullVersion}/jre/lib/security/java.security",
       subscribe   => Exec["sleep 3 sec for urandomJavaFix ${fullVersion}"],
       refreshonly => true,
     }
-  }    
+  }
 }

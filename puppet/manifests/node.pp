@@ -6,10 +6,10 @@
 #
 
 node 'node1.example.com', 'node2.example.com' {
-  
+
   include os, ssh, java, orawls::weblogic, orautils, bsu, copydomain, nodemanager
 
-  Class['java'] -> Class['orawls::weblogic'] 
+  Class['java'] -> Class['orawls::weblogic']
 }
 
 # operating settings for Middleware
@@ -63,7 +63,8 @@ class os {
   $install = [ 'binutils.x86_64','unzip.x86_64']
 
   package { $install:
-    ensure  => present,
+    ensure        => present,
+    allow_virtual => false,
   }
 
   class { 'limits':
@@ -106,7 +107,7 @@ class ssh {
     ensure => "directory",
     alias  => "oracle-ssh-dir",
   }
-  
+
   file { "/home/oracle/.ssh/id_rsa.pub":
     ensure  => present,
     owner   => "oracle",
@@ -115,7 +116,7 @@ class ssh {
     source  => "/vagrant/ssh/id_rsa.pub",
     require => File["oracle-ssh-dir"],
   }
-  
+
   file { "/home/oracle/.ssh/id_rsa":
     ensure  => present,
     owner   => "oracle",
@@ -124,7 +125,7 @@ class ssh {
     source  => "/vagrant/ssh/id_rsa",
     require => File["oracle-ssh-dir"],
   }
-  
+
   file { "/home/oracle/.ssh/authorized_keys":
     ensure  => present,
     owner   => "oracle",
@@ -132,7 +133,7 @@ class ssh {
     mode    => "644",
     source  => "/vagrant/ssh/id_rsa.pub",
     require => File["oracle-ssh-dir"],
-  }        
+  }
 }
 
 
@@ -142,15 +143,16 @@ class java {
   $remove = [ "java-1.7.0-openjdk.x86_64", "java-1.6.0-openjdk.x86_64" ]
 
   package { $remove:
-    ensure  => absent,
+    ensure        => absent,
+    allow_virtual => false,
   }
 
   include jdk7
 
   jdk7::install7{ 'jdk1.7.0_51':
-      version                   => "7u51" , 
+      version                   => "7u51" ,
       fullVersion               => "jdk1.7.0_51",
-      alternativesPriority      => 18000, 
+      alternativesPriority      => 18000,
       x64                       => true,
       downloadDir               => "/var/tmp/install",
       urandomJavaFix            => true,

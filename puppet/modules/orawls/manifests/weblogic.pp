@@ -1,8 +1,8 @@
 # == Class: orawls::weblogic
 #
 class orawls::weblogic (
-  $version              = 1111,  # 1036|1111|1211|1212|1214
-  $filename             = undef, # wls1036_generic.jar|wls1211_generic.jar|wls_121200.jar|wls_121300.jar|oepe-wls-indigo-installer-11.1.1.8.0.201110211138-10.3.6-linux32.bin
+  $version              = 1212,  # 1036|1111|1211|1212|1214
+  $filename             = wls_121200.jar, # wls1036_generic.jar|wls1211_generic.jar|wls_121200.jar|wls_121300.jar|oepe-wls-indigo-installer-11.1.1.8.0.201110211138-10.3.6-linux32.bin
   $oracle_base_home_dir = undef, # /opt/oracle
   $middleware_home_dir  = undef, # /opt/oracle/middleware11gR1
   $wls_domains_dir      = undef, # /opt/oracle/wlsdomains/domains
